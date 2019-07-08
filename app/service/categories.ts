@@ -10,10 +10,11 @@ export default class CategoryService extends Service {
      * query categories
      * @param params - query parameter
      */
-    public async query(params: {id: number}|{name: string, type: string}): Promise<Category|null> {
+    public async queryOne(params: {id: number}|{name: string, type: string}): Promise<Category|null> {
         const category = await this.ctx.model.Category.findOne<Category>({
             where: {
                 ...params,
+                deleted: true,
             },
         });
         return category;

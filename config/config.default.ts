@@ -8,7 +8,7 @@ export default (appInfo: EggAppInfo) => {
     config.keys = appInfo.name + '_1559815027888_9407';
 
     // add your egg config in here
-    config.middleware = [];
+    config.middleware = [ 'notfoundHandler' ];
 
     config.sequelize = {
         dialect: 'mysql',
@@ -16,6 +16,7 @@ export default (appInfo: EggAppInfo) => {
         port: 3306,
         database: 'account',
         username: 'root',
+        password: '',
         timezone: '+08:00',
         exclude: 'base_model.ts',
     };

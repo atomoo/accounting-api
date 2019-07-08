@@ -13,7 +13,7 @@ export default class CategoryController extends Controller {
 
     public async index() {
         const { ctx } = this;
-        const result = await ctx.model.Category.findAll();
+        const result = await ctx.model.Category.findAll({ where: { deleted: false } });
         ctx.body = result;
     }
 
@@ -23,12 +23,12 @@ export default class CategoryController extends Controller {
         if (!category.name || !category.type || !category.title) {
             ctx.body = {
                 ret: '400',
-                msg: '参数错误',
+                msg: 'Invalid Parameter',
             };
             ctx.status = 400;
             return;
         }
-        const categoryRecord = await this.categoryService.query({
+        const categoryRecord = await this.categoryService.queryOne({
             name: category.name,
             type: category.name,
         });
@@ -46,5 +46,48 @@ export default class CategoryController extends Controller {
             title: category.title,
         });
         ctx.body = result;
+    }
+
+    public async destroy() {
+        const { ctx } = this;
+        const id = ctx.query.id;
+        if (!id) {
+            ctx.status = 400;
+            ctx.body = {
+                ret: '400',
+                msg: 'Invalid Parameter',
+            };
+            return;
+        }
+        const categoryFound = await this.categoryService.queryOne({ id });
+        if (!categoryFound) {
+            ctx.status = 404;
+            ctx.body = {
+                ret: '404',
+                msg: 'Not found',
+            };
+            return;
+        }
+        const updateResult = await ctx.model.Category.update(
+            { deleted: true },
+            {
+                where: { id: categoryFound.id! },
+            },
+        );
+        if (updateResult && updateResult[0] === 1) {
+            ctx.status = 200;
+            ctx.body = {
+                ret: '200',
+                msg: 'success',
+            };
+            return;
+        } else {
+            ctx.status = 500;
+            ctx.body = {
+                ret: '500',
+                msg: 'system error',
+            };
+            return;
+        }
     }
 }
