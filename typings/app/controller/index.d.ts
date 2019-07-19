@@ -3,11 +3,11 @@
 
 import 'egg';
 import ExportCategories from '../../../app/controller/categories';
-import ExportHome from '../../../app/controller/home';
+import ExportRecords from '../../../app/controller/records';
 
 declare module 'egg' {
   interface IController {
     categories: ExportCategories;
-    home: ExportHome;
+    records: ExportRecords;
   }
 }

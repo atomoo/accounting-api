@@ -3,9 +3,11 @@
 
 import 'egg';
 import ExportCategories from '../../../app/service/categories';
+import ExportRecords from '../../../app/service/records';
 
 declare module 'egg' {
   interface IService {
     categories: ExportCategories;
+    records: ExportRecords;
   }
 }
